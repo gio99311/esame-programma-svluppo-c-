@@ -119,18 +119,20 @@ public class ApplicazioneNegozio
         // - visualizzare storico acquisti dell'utente.
 
         Console.WriteLine("=== MENU UTENTE ===");
-        Console.Write("Inserisci il tuo nome utente: ");
-        string? username = Console.ReadLine();
 
-        Utente utente;
-        try
+        Utente? utente = null;
+        while (utente == null)
         {
-            utente = new Utente(username);
-        }
-        catch (ArgumentException)
-        {
-            Console.WriteLine("Nome utente non valido. Riprova.");
-            return;
+            Console.Write("Inserisci il tuo nome utente: ");
+            string? username = Console.ReadLine();
+            try
+            {
+                utente = new Utente(username);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Nome utente non valido. Riprova.");
+            }
         }
 
         Console.WriteLine($"Benvenuto, {utente.Nome}!");
