@@ -252,11 +252,9 @@ public class ApplicazioneNegozio
             switch (scelta)
             {
                 case "1":
-                    // Utilizziamo il metodo che hai già implementato
                     MostraCatalogo();
                     break;
                 case "2":
-                    // Aggiungi nuovo prodotto al catalogo (metodo CatalogoProdotti.AggiungiProdotto è implementato)
                     Console.Write("Inserisci codice prodotto: ");
                     string? codice = Console.ReadLine();
                     Console.Write("Inserisci nome prodotto: ");
@@ -281,16 +279,49 @@ public class ApplicazioneNegozio
                     }
                     break;
                 case "3":
-                    // TODO: Chiamare metodo per eliminazione tramite Codice
-                    Console.WriteLine("Funzionalità di eliminazione prodotto non ancora implementata.");
+                    Console.Write("Inserisci codice prodotto da eliminare dal catalogo: ");
+                    string? codDel = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(codDel) && catalogoProdotti.EliminaProdotto(codDel.Trim()))
+                    {
+                        Console.WriteLine("Prodotto eliminato correttamente.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Impossibile trovare il prodotto specificato.");
+                    }
                     break;
                 case "4":
-                    // TODO: Chiamare metodo per cambio prezzo
-                    Console.WriteLine("Funzionalità di modifica prezzo non ancora implementata.");
+                    Console.Write("Inserisci codice prodotto: ");
+                    string? codPrice = Console.ReadLine();
+                    decimal nuovoPrezzo = LeggiPrezzoPositivo("Inserisci il nuovo prezzo: ");
+                    if (!string.IsNullOrWhiteSpace(codPrice) && catalogoProdotti.ModificaPrezzoProdotto(codPrice.Trim(), nuovoPrezzo))
+                    {
+                        Console.WriteLine("Prezzo modificato con successo.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Errore: prodotto non trovato o prezzo non valido.");
+                    }
                     break;
                 case "5":
-                    // TODO: Chiamare metodo per alterare la quantità disponibile
-                    Console.WriteLine("Funzionalità di modifica quantità non ancora implementata.");
+                    Console.Write("Inserisci codice prodotto: ");
+                    string? codStock = Console.ReadLine();
+                    Console.Write("Inserisci variazione di magazzino (es. 5 per aggiungere, -3 per prelevare): ");
+                    if (int.TryParse(Console.ReadLine(), out int variazione))
+                    {
+                        if (!string.IsNullOrWhiteSpace(codStock) && catalogoProdotti.ModificaQuantitaProdotto(codStock.Trim(), variazione))
+                        {
+                            Console.WriteLine("Magazzino aggiornato con successo.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Errore: prodotto non trovato o l'operazione porterebbe il magazzino sotto zero.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Valore numerico non valido.");
+                    }
                     break;
                 case "6":
                     List<Acquisto> tuttiGliAcquisti = storicoAcquisti.OttieniTuttiGliAcquisti();
