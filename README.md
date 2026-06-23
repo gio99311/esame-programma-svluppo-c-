@@ -167,3 +167,55 @@ cd [percorso_progetto]
 - leggere con attenzione il risultato dei test 
 - leggere con attenzione l'output che mostra eventuali errori (distinguando tra errori a Compile Time (errori di sintassi) ed errori a Run Time (metodi/funzioni che non fanno quello che dovrebbero fare)) e guardare il numero della riga in cui è presente l'errore
 - git è opzionale
+
+
+
+------------------------------------------------------------------
+---
+
+# 🛠️ Note di Implementazione dello Studente
+
+Questa sezione documenta il lavoro svolto per completare il template d'esame, illustrando i dettagli dell'architettura e le soluzioni tecniche adottate per implementare le funzionalità richieste.
+
+## 📋 Stato del Progetto e Completamento TODO
+
+Tutti i metodi operazionali contrassegnati inizialmente con `throw new NotImplementedException()` sono stati completati con successo, rispettando rigidamente i vincoli di traccia (firme, nomi, parametri e tipi di ritorno originali sono rimasti invariati).
+
+### ⚙️ Logica di Business e Classi di Dominio Implementate
+* **`ElementoCarrello.CambiaQuantitaScelta`:** Inserita validazione robusta che impedisce quantità minori o uguali a zero lanciando un'eccezione descrittiva (`ArgumentException`).
+* **`CatalogoProdotti`:** Implementati i metodi di persistenza in memoria:
+  * Riconoscimento ed eliminazione dei prodotti tramite codice.
+  * Modifica sicura dei prezzi e gestione dei flussi di magazzino (carico/scarico merci) con blocco preventivo dei valori negativi.
+* **`CarrelloUtente`:** Implementato il nucleo del carrello della spesa. Gestisce l'accorpamento delle quantità se un prodotto viene aggiunto più volte e valida le richieste in base alle reali disponibilità di magazzino prima dell'acquisto.
+* **`StoricoAcquisti`:** Implementato il filtro di ricerca degli acquisti per utente tramite confronti *case-insensitive* per ottimizzare l'esperienza utente.
+* **`ServizioNegozio` (Orchestratore):** Completato il metodo critico `ConfermaAcquisto` che esegue in modo atomico le seguenti operazioni:
+  1. Verifica dello stato del carrello (impedisce transazioni vuote).
+  2. Doppio controllo preventivo delle giacenze.
+  3. Decremento controllato del magazzino dei prodotti acquistati.
+  4. Generazione dell'oggetto `Acquisto` e archiviazione nello storico globale.
+  5. Svuotamento del carrello a transazione conclusa.
+
+---
+
+## 💻 Integrazione dell'Interfaccia Utente (`ApplicazioneNegozio`)
+
+I menu testuali sono stati collegati alle rispettive logiche di business nel seguente modo:
+
+### 👤 Menu Utente
+1. **Aggiunta a Carrello:** Collegato all'input del codice prodotto e della quantità desiderata (protetta da inserimenti errati).
+2. **Modifica Quantità:** Consente il cambio dinamico delle unità direttamente dall'ID del prodotto.
+3. **Rimozione Prodotto:** Permette di scartare un singolo articolo dal carrello senza azzerare il resto.
+4. **Checkout (Conferma Acquisto):** Cattura le eccezioni di magazzino e, in caso di esito positivo, stampa a video la ricevuta fiscale dettagliata tramite il `ServizioNegozio`.
+
+### 👑 Menu Amministratore
+1. **Eliminazione Prodotto:** Consente la rimozione di un articolo dal catalogo tramite codice univoco.
+2. **Variazione Prezzo:** Aggiorna i listini in tempo reale.
+3. **Gestione Scorte (Incolla/Preleva):** Permette all'amministratore di inserire variazioni positive (es. rifornimento merci `+10`) o negative (es. merce danneggiata `-2`), mantenendo la consistenza del magazzino.
+
+---
+
+## 🧪 Principi di Qualità e Robustezza del Codice
+
+* **Incapsulamento e Sicurezza:** È stato preservato il design a immutabilità controllata. Nessuna lista interna viene esposta direttamente all'esterno; i metodi usano l'incapsulamento protetto restituendo copie superficiali (`new List<T>`).
+* **Integrità dei Dati:** Le transazioni d'acquisto falliscono preventivamente prima di modificare lo stato del magazzino se anche solo uno dei prodotti richiesti risulta esaurito, garantendo la consistenza dei dati.
+* **Robustezza ai Crash:** L'interazione con l'utente sfrutta la combinazione di cicli di riprova e metodi protetti da parsing (`TryParse`) per far sì che l'applicazione non crashi mai a fronte di stringhe vuote, caratteri alfabetici al posto di numeri o prezzi negativi.
