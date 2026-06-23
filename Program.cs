@@ -20,8 +20,8 @@ public class Program
     {
         // Punto di ingresso della Console App.
         ApplicazioneNegozio applicazione = new ApplicazioneNegozio();
-        // applicazione.Avvia();
-        TestNegozioOnline.EseguiTuttiITest();
+        applicazione.Avvia();
+        // TestNegozioOnline.EseguiTuttiITest();
     }
 }
 
@@ -42,15 +42,36 @@ public class ApplicazioneNegozio
         CaricaDatiIniziali();
     }
 
-    public void Avvia()
-    {
-        // TODO: implementare il ciclo principale della Console App.
-        // Suggerimento:
-        // 1. mostrare un messaggio di benvenuto;
-        // 2. chiedere se l'utente vuole entrare come "utente" o "amministratore";
-        // 3. chiamare GestisciMenuUtente oppure GestisciMenuAmministratore;
-        // 4. permettere l'uscita dal programma con una scelta dedicata.
-        throw new NotImplementedException("Completare il metodo Avvia.");
+   public void Avvia()
+   {
+        Console.WriteLine("=== BENVENUTO NEL NEGOZIO ONLINE ===");
+            
+        bool esci = false;
+        while (!esci)
+        {
+            Console.WriteLine("\n--- MENU PRINCIPALE ---");
+            
+            string scelta = ScegliRuolo();
+            if (scelta == "utente")
+            {
+                Console.WriteLine("\n--- Hai selezionato il ruolo di utente ---");
+                // GestisciMenuUtente();
+            }
+            else if (scelta == "amministratore")
+            {
+                Console.WriteLine("\n--- Hai selezionato il ruolo di amministratore ---");
+                // GestisciMenuAmministratore();
+            }
+            else if (scelta == "esci")
+            {
+                esci = true;
+                Console.WriteLine("\nGrazie per aver utilizzato il negozio online. Arrivederci!");
+            }
+            else
+            {
+                Console.WriteLine("Scelta non valida. Riprova.");
+            }
+        }
     }
 
     private void CaricaDatiIniziali()
@@ -64,10 +85,24 @@ public class ApplicazioneNegozio
 
     private string ScegliRuolo()
     {
-        // TODO: leggere da console il ruolo scelto.
-        // Valori consigliati: "utente", "amministratore", "esci".
-        // Gestire input vuoti e maiuscole/minuscole con Trim() e ToLower().
-        throw new NotImplementedException("Completare il metodo ScegliRuolo.");
+        while (true)
+        {
+            Console.Write("\nScegli ruolo (utente/amministratore/esci): ");
+            string? input = Console.ReadLine();
+            
+           
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                string sceltaFormattata = input.Trim().ToLower();
+                
+                if (sceltaFormattata == "utente" || sceltaFormattata == "amministratore" || sceltaFormattata == "esci")
+                {
+                    return sceltaFormattata;
+                }
+            }
+            
+            Console.WriteLine("Opzione non valida. Inserisci esattamente 'utente', 'amministratore' o 'esci'.");
+        }
     }
 
     private void GestisciMenuUtente()
