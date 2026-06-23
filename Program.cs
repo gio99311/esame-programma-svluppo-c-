@@ -54,8 +54,8 @@ public class ApplicazioneNegozio
             string scelta = ScegliRuolo();
             if (scelta == "utente")
             {
-                Console.WriteLine("\n--- Hai selezionato il ruolo di utente ---");
-                // GestisciMenuUtente();
+                // Console.WriteLine("\n--- Hai selezionato il ruolo di utente ---");
+                GestisciMenuUtente();
             }
             else if (scelta == "amministratore")
             {
@@ -117,7 +117,82 @@ public class ApplicazioneNegozio
         // - svuotare carrello;
         // - confermare acquisto;
         // - visualizzare storico acquisti dell'utente.
-        throw new NotImplementedException("Completare il metodo GestisciMenuUtente.");
+
+        Console.WriteLine("=== MENU UTENTE ===");
+        Console.Write("Inserisci il tuo nome utente: ");
+        string? username = Console.ReadLine();
+
+        Utente utente;
+        try
+        {
+            utente = new Utente(username);
+        }
+        catch (ArgumentException)
+        {
+            Console.WriteLine("Nome utente non valido. Riprova.");
+            return;
+        }
+
+        Console.WriteLine($"Benvenuto, {utente.Nome}!");
+
+        bool tornaAlMenu = false;
+        while (!tornaAlMenu){
+            Console.WriteLine("\n--- Quale operazione vuoi eseguire? ---");
+            Console.WriteLine("1. Visualizza catalogo");
+            Console.WriteLine("2. Aggiungi prodotto al carrello");
+            Console.WriteLine("3. Visualizza carrello");
+            Console.WriteLine("4. Modifica quantità nel carrello");
+            Console.WriteLine("5. Rimuovi prodotto dal carrello");
+            Console.WriteLine("6. Svuota carrello");
+             Console.WriteLine("7. Conferma acquisto");
+            Console.WriteLine("8. Visualizza storico acquisti");
+            Console.WriteLine("0. Torna al menu principale");
+            Console.Write("Scelta: ");
+
+            string? scelta = Console.ReadLine();
+            switch (scelta)
+            {
+                case "1":
+                    MostraCatalogo();
+                    break;
+                case "2":
+                    // AggiungiProdotto();
+                    Console.WriteLine("Funzionalità di aggiunta prodotto al carrello non ancora implementata.");
+                    break;
+                case "3":
+                    // MostraCarrello();
+                    Console.WriteLine("Funzionalità di visualizzazione carrello non ancora implementata.");
+                    break;
+                case "4":
+                    // ModificaQuantitaCarrello();
+                    Console.WriteLine("Funzionalità di modifica quantità nel carrello non ancora implementata.");
+                    break;
+                case "5":
+                    // RimuoviProdottoCarrello();
+                    Console.WriteLine("Funzionalità di rimozione prodotto dal carrello non ancora implementata.");
+                    break;
+                case "6":
+                    // SvuotaCarrello();
+                    Console.WriteLine("Funzionalità di svuotamento carrello non ancora implementata.");
+                    break;
+                case "7":
+                    // ConfermaAcquisto();
+                    Console.WriteLine("Funzionalità di conferma acquisto non ancora implementata.");
+                    break;
+                case "8":
+                    // VisualizzaStoricoAcquisti();
+                    Console.WriteLine("Funzionalità di visualizzazione storico acquisti non ancora implementata.");
+                    break;
+                case "0":
+                    tornaAlMenu = true;
+                    break;
+                default:
+                    Console.WriteLine("Scelta non valida. Riprova.");
+                    break;
+
+            }    
+        }
+        // throw new NotImplementedException("Completare il metodo GestisciMenuUtente.");
     }
 
     private void GestisciMenuAmministratore()
